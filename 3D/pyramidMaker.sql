@@ -55,15 +55,17 @@ base2 AS
 	SELECT ST_Translate(the_geom, 0, 0, height) AS the_geom FROM baseBox2
 	),
 -- Now we construct the triangles, ensuring that we digitize them counterclockwise for validity
+-- FIX Previous version was mixing geometries with different dimensions. i.e. 2d and 3d.
+--  I forced this to work only on 3d. MAybe working with a 3d origin would be faster since the begining.
 triOnePoints AS
 	(
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, 0.5 * basex, 0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), 0.5 * basex, 0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, -0.5 * basex, 0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), -0.5 * basex, 0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 	),
 triOneAngle AS
 	(
@@ -71,13 +73,13 @@ triOneAngle AS
 	),
 triTwoPoints AS
 	(
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, 0.5 * basex, -0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), 0.5 * basex, -0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, 0.5 * basex, 0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), 0.5 * basex, 0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 	),
 triTwoAngle AS
 	(
@@ -85,13 +87,13 @@ triTwoAngle AS
 	),
 triThreePoints AS
 	(
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, -0.5 * basex, -0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), -0.5 * basex, -0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, 0.5 * basex, -0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), 0.5 * basex, -0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 	),
 triThreeAngle AS
 	(
@@ -99,13 +101,13 @@ triThreeAngle AS
 	),
 triFourPoints AS
 	(
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, -0.5 * basex, 0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), -0.5 * basex, 0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT ST_Translate(origin, -0.5 * basex, -0.5 * basey, height) AS the_geom
+	SELECT ST_Translate(ST_Force3DZ(origin), -0.5 * basex, -0.5 * basey, height) AS the_geom
 		UNION ALL
-	SELECT origin AS the_geom
+	SELECT ST_Force3DZ(origin) AS the_geom
 	),
 triFourAngle AS
 	(
